@@ -73,6 +73,33 @@
                         </div>
                     </div>
 
+                    <div class="help-box" id="help-for-feature-count-success-{{ loop.index0 }}" style="display:none;">
+                        <div class="box-feature-fails">
+                            <p><strong>{{ feature.getGherkin().getTitle() }}</strong></p>
+                            {% for testcase in feature.getReport().listSuccessTestCases() %}
+                            <div class="testcase {{ testcase.type }}">{{ testcase.name }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="help-box" id="help-for-count-fails-{{ loop.index0 }}" style="display:none;">
+                        <div class="box-feature-fails">
+                            <p><strong>{{ feature.getGherkin().getTitle() }}</strong></p>
+                            {% for testcase in feature.getReport().listFailuresTestCases() %}
+                            <div class="testcase {{ testcase.type }}">{{ testcase.name }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="help-box" id="help-for-count-pending-{{ loop.index0 }}" style="display:none;">
+                        <div class="box-feature-fails">
+                            <p><strong>{{ feature.getGherkin().getTitle() }}</strong></p>
+                            {% for testcase in feature.getReport().listPendingTestCases() %}
+                            <div class="testcase {{ testcase.type }}">{{ testcase.name }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
                     <span class="feature-title">
                         <strong><a
                                 class="help feature-show-details"
@@ -81,9 +108,20 @@
                     </span>
                     <div class="feature-count">
                         (
-                        <span class="feature-count-success">{{ feature.getReport().countSuccess() }}</span>
-                        / <span class="feature-count-pending">{{ feature.getReport().countPending() }}</span>
-                        / <span class="feature-count-fails">{{ feature.getReport().countFailures() }}</span>
+                        <a
+                            class="help feature-count-success"
+                            data-help-selector="#help-for-feature-count-success-{{ loop.index0 }}"
+                            href="{{ path('hbw.edit', {feature: feature.getHash() }) }}">{{ feature.getReport().countSuccess() }}</a></strong>
+                        / 
+                        <a
+                            class="help feature-count-pending"
+                            data-help-selector="#help-for-count-pending-{{ loop.index0 }}"
+                            href="{{ path('hbw.edit', {feature: feature.getHash() }) }}">{{ feature.getReport().countPending() }}</a></strong>
+                        / 
+                        <a
+                            class="help feature-count-fails"
+                            data-help-selector="#help-for-count-fails-{{ loop.index0 }}"
+                            href="{{ path('hbw.edit', {feature: feature.getHash() }) }}">{{ feature.getReport().countFailures() }}</a></strong>
                         / <span class="feature-count-tests">{{ feature.getReport().countTests() }}</span>
                         )
                     </div>
@@ -141,7 +179,25 @@
             $e.data('content', $box.html());
         });
         $('.feature-show-details').popover();
-
+        
+        $('.feature-count-success').each(function() {
+            var $e = $(this);
+            var $box = $($e.data('help-selector'));
+            $e.data('content', $box.html());
+        });
+        $('.feature-count-success').popover();
+        $('.feature-count-pending').each(function() {
+            var $e = $(this);
+            var $box = $($e.data('help-selector'));
+            $e.data('content', $box.html());
+        });
+        $('.feature-count-pending').popover();
+        $('.feature-count-fails').each(function() {
+            var $e = $(this);
+            var $box = $($e.data('help-selector'));
+            $e.data('content', $box.html());
+        });
+        $('.feature-count-fails').popover();
     });
 </script>
 {% endblock %}
